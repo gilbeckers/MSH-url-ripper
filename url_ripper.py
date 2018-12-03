@@ -1,14 +1,22 @@
 import urllib.request as urllib2
+import urllib
 from bs4 import BeautifulSoup
 import pandas as pd
 
-base_url = "http://my-smarthome.be/product.html?id="
+#base_url = "http://my-smarthome.be/product.html?id="
+base_url = "http://debouwdoos.be/product.html?id="
 
-csv_input = "products-export-2018-11-30-12-37-36.csv"
+csv_input = "products-export-2018-11-30-13-47-31.csv"
 
 def scrap_link(input_link):
     #Opening site using urllib2
-    html_page = html_page = urllib2.urlopen(input_link)
+    print("\t Scrapping: " + input_link)
+    try:
+        html_page = urllib2.urlopen(input_link)
+    except urllib.error.URLError as e:
+        print(e.strerror) 
+        raise
+    
     soup = BeautifulSoup(str(html_page.read()), 'html.parser')
 
     for link in soup.findAll('a', {'class': 'crumb'}):
@@ -18,7 +26,6 @@ def scrap_link(input_link):
         except KeyError as e:
             print("Key error in html parsing ({0}): {1}".format(e.errno, e.strerror))
             print(html_page.url)
-            #pass
             raise
 
 
@@ -35,7 +42,7 @@ for (row_index, the_id) in enumerate(id_columns):
     try:
         scrapped_link = scrap_link(base_url+actual_id)
         print(str(row_index) + ": " + scrapped_link)
-    except KeyError:
+    except (KeyError,urllib.error.URLError):
         pass
 
     #Update column

@@ -4,6 +4,7 @@ import pandas as pd
 
 base_url = "http://my-smarthome.be/product.html?id="
 
+csv_input = "products-export-2018-11-30-12-37-36.csv"
 
 def scrap_link(input_link):
     #Opening site using urllib2
@@ -22,7 +23,7 @@ def scrap_link(input_link):
 
 
 
-df = pd.read_csv('Velbus producten_shopping.csv')
+df = pd.read_csv(csv_input)
 id_columns = df['Internal_Variant_ID'] #df.column_name #you can also use df['column_name']
 
 # Add new column

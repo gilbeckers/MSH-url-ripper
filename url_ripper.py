@@ -3,10 +3,12 @@ import urllib
 from bs4 import BeautifulSoup
 import pandas as pd
 
+#todo: url reads parallel maken
+
 #base_url = "http://my-smarthome.be/product.html?id="
 base_url = "http://debouwdoos.be/product.html?id="
 
-csv_input = "products-export-2018-11-30-13-47-31.csv"
+csv_input = "products-export-2018-12-04-22-11-06.csv"
 
 def scrap_link(input_link):
     #Opening site using urllib2
@@ -16,9 +18,14 @@ def scrap_link(input_link):
     except urllib.error.URLError as e:
         print(e.strerror) 
         raise
+    except (http.client.IncompleteRead) as e:
+        print(e.strerror)
+        soup = e.partial
     
     soup = BeautifulSoup(str(html_page.read()), 'html.parser')
-
+    
+    
+    
     for link in soup.findAll('a', {'class': 'crumb'}):
         try:
             #print(link['href'])
